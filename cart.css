@@ -1,0 +1,36 @@
+/* Add your CSS styles for the cart page here */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.cart-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cart-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.cart-item img {
+    max-width: 100px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+#complete-purchase {
+    display: block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#complete-purchase:hover {
+    background-color: #45a049;
+}

@@ -1,128 +1,117 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vishal Pal</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            background-color: #f9f9f9;
-        }
-        header {
-            background: #66ccff;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            animation: fadeInDown 1s ease-out;
-        }
-        nav {
-            background: #ffcc66;
-            text-align: center;
-            padding: 10px 0;
-            animation: fadeIn 1s ease-out;
-        }
-        nav a {
-            color: #333;
-            text-decoration: none;
-            padding: 10px 20px;
-            margin: 0 10px;
-            border-radius: 20px;
-            background-color: #fff;
-            transition: background-color 0.3s ease;
-        }
-        nav a:hover {
-            background: #66ccff;
-            color: #fff;
-        }
-        .container {
-            padding: 20px;
-            animation: zoomIn 1s ease-out;
-        }
-        .footer {
-            background: #66ccff;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        /* Keyframe animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes zoomIn {
-            from {
-                transform: scale(0.5);
-            }
-            to {
-                transform: scale(1);
-            }
-        }
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="index.css">
+    <script defer src="index.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="new.js"></script>
+    <link rel="stylesheet" href="user.css">
+    <link rel="stylesheet" href="location.css">
+    <title>ShopMe</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-storage-compat.js"></script>
 </head>
 <body>
     <header>
-        <h1>Vishal Pal</h1>
-        <p>Student at Ramniranjan Jhunjhunwala College, Ghatkopar West | B.Sc. Computer Science</p>
+        <div id="main-header">
+            <div id="logo" onclick="goToHomePage()">ShopMe</div>
+            <button class="view-cart-btn" onclick="toggleCart()">View Cart</button>
+            <div id="location">
+                <button id="getLocationBtn" onclick="getLocation()">Get Location</button>
+                <p id="status"></p>
+                <p id="address"></p>
+            </div>
+            <div id="search-bar">
+                <input id="searchInput" type="text" oninput="searchProducts()" placeholder="Search for products">
+            </div>
+            <div id="product-type">
+                <select>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="books">Books</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+            <div id="language">
+                <select>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <!-- Add more language options as needed -->
+                </select>
+            </div>
+            <h1 id="welcomeMessage">Welcome to ShopMe</h1>
+            <button id="signInButton" onclick="redirectToAuthPage()">Sign Up / Sign In</button>            
+        </div>
     </header>
-    <nav>
-        <a href="#about">About</a>
-        <a href="#interests">Interests</a>
-        <a href="#projects">Projects</a>
-    </nav>
-    <div class="container">
-        <section id="about">
-            <h2>About Me</h2>
-            <p>My name is Vishal Pal, and I am currently pursuing a B.Sc. in Computer Science at Ramniranjan Jhunjhunwala College, Ghatkopar West. I am passionate about technology and constantly seek to expand my knowledge in this ever-evolving field.</p>
-        </section>
-        <section id="interests">
-            <h2>My Interests</h2>
-            <p>I have a keen interest in various technology-related fields. I enjoy learning about new advancements, exploring different programming languages, and working on tech projects that challenge my skills and creativity.</p>
-        </section>
-        <section id="projects">
-            <h2>Projects</h2>
-            <p>Throughout my studies, I have worked on several projects that showcase my abilities and interests. Here are a few highlights:</p>
-            <ul>
-                <li><strong>Shopping Website:</strong> I developed a fully functional e-commerce website where users can browse products, add them to their cart, and make purchases securely. The website includes features such as user authentication, product categories, and a responsive design for optimal viewing on various devices.</li>
-            </ul>
-            <p>Feel free to contact me if you are interested in learning more about my work or collaborating on a project.</p>
-        </section>
+
+
+
+
+    <div id="category-buttons">
+        <button id="profileButton" style="display: none;" onclick="openProfilePopup()">Profile</button>
+
+        
+        <!-- Profile Popup -->
+<div id="profilePopup" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeProfilePopup()">&times;</span>
+        <h2>Profile</h2>
+        <form id="profileForm">
+            <label for="profileFirstName">First Name:</label>
+            <input type="text" id="profileFirstName" name="profileFirstName">
+            
+            <label for="profileLastName">Last Name:</label>
+            <input type="text" id="profileLastName" name="profileLastName">
+            
+            <label for="profileMobile">Mobile:</label>
+            <input type="text" id="profileMobile" name="profileMobile">
+            
+            <label for="profilePicture">Profile Picture:</label>
+            <input type="file" id="profilePicture" name="profilePicture">
+            
+            <button type="button" id="saveProfileButton" onclick="saveUserProfile()" disabled>Save</button>
+        </form>
+        <img id="profilePictureDisplay" src="" alt="Profile Picture" style="width: 100px; height: 100px;">
     </div>
-    <div class="footer">
-        <p>Contact Info:</p>
-        <p>Mobile: +916394223695</p>
-        <p>Email: palv67322@gmail.com</p>
-        <p>Instagram: <a href="https://www.instagram.com/vishal_pal_vsp/" style="color: #fff;">@vishal_pal_vsp</a></p>
-        <p>&copy; 2024 Vishal Pal. All rights reserved.</p>
+</div>
+
+  
+
+        <button onclick="showBestSellers()">Best Sellers</button>
+        <button onclick="showNewReleases()">New Releases</button>
+        <button onclick="showElectronics()">Electronics</button>
     </div>
+
+    <div id="image-slider" onmouseover="showArrows()" onmouseout="hideArrows()">
+        <button id="prev" onclick="prevSlide()">❮</button>
+        <img src="https://images-eu.ssl-images-amazon.com/images/G/31/img23/Softlines_JWL_SH_GW_Assets/2024/SSH/Mar/MFD/uNREC/All/v2/3000all._CB580379196_.jpg" alt="Image 1">
+        <img src="https://images-eu.ssl-images-amazon.com/images/G/31/img22/Wireless/devjyoti/GW/Uber/Nov/D103625178_DesktopTallHero_3000x1200._CB574597993_.jpg" alt="Image 2">
+        <img src="https://images-eu.ssl-images-amazon.com/images/G/31/img24/Fashion/GW/MFD/Mar/PC/Deals-PC-3000-Unrec._CB580048821_.jpg" alt="Image 3">
+        <button id="next" onclick="nextSlide()">❯</button>
+    </div>
+
+    <section id="products">
+        <div class="products" id="product-container"></div>
+        <!-- Add more product divs as needed -->
+    </section>
+
+    <aside id="cart">
+        <h2>Shopping Cart</h2>
+        <ul id="cart-items">
+            <!-- Cart items will be added dynamically using JavaScript -->
+        </ul>
+        <p>Total: <span id="cart-total">0.00</span></p>
+        <button id="proceed-to-buy-button" onclick="proceedToBuy()">Proceed to Buy</button>
+    </aside>
+
+    <script src="product.js"></script>
+    <script src="script.js"></script>
+    <script src="location.js"></script>
+    <script src="userdata.js"></script>
 </body>
 </html>
